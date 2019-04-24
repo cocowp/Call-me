@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<link href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+	<!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+	<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+	<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+	<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+</head>
+<body>
+	  <table class="table table-bordered">
+<tbody id="con">
+       
+</tbody>
+</table>
+      <center>
+       <button type="button" class="btn btn-danger">Start</button>
+       </center>
+</body>
+</html>
+<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script src="../../../../static/layers/layer/layer.js"></script>
+<script>
+	$(document).ready(function(){
+
+
+            $(document).on('click',':button',function(){
+
+               $.ajax({
+                    url : "{:url('Pro/once')}",
+                    dataType : "json",
+                    success:function (result) {
+                        result = JSON.parse(result)
+
+						var nuser = result.data;
+
+                        $("#"+nuser+"").css({background:'red'})
+
+			            layer.confirm(result.data+'回答的对吗？', {
+						  btn: ['√','×'] //按钮
+						}, function(){
+						  //答对的操作
+                            layer.msg('恭喜你哦!!!', {icon: 1});
+                            $("#"+nuser+"").css({background:''})
+                         $.ajax({
+	                    url : "{:url('Pro/upwless')}",
+	                    type : "post",
+	                    dataType : "json",
+	                    data : {
+	                    	user : result.data
+	                    },
+	                    success:function (results) {
+	                        results = JSON.parse(results)
+                         }
+                         })
+
+						}, function(){
+						  //答错的操作
+                            layer.msg('可惜了！下次努力', {icon: 1});
+                            $("#"+nuser+"").css({background:''})
+                            $.ajax({
+                                url : "{:url('Pro/upwadd')}",
+                                type : "post",
+                                dataType : "json",
+                                data : {
+                                    user : result.data
+                                },
+                                success:function (results) {
+                                    results = JSON.parse(results)
+                                }
+                            })
+
+						});
+                    }
+                })
+
+
+            });
+
+         $.ajax({
+                    url : "{:url('Pro/students')}",
+                    type : "post",
+                    dataType : "json",
+                    success:function (result) {
+                        result = JSON.parse(result)
+                        var str = '<tr>';
+                        $(result.data).each(function(i,v){
+
+                             str += "<td id="+v.user+">"+v.user+"</td>";
+                            if((i+1)%3 == 0)
+                            {
+                                str += "</tr>";
+                            }
+
+                        })
+
+                        $("#con").html(str);
+
+                    }
+                })
+
+	})
+</script>
