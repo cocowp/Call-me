@@ -61,6 +61,10 @@ class Pro extends Controller{
         $data = Db::table('user')->where('user',$user)->find();
 
         $nweight = $data['weight']*0.5;
+        
+        $arr = ['names'=>$user,'status'=>"答对喽"];
+
+        Db::table('history')->insert($arr);
 
         Db::table('user')->where('user',$user)->update(['weight'=>$nweight]);
 
@@ -77,9 +81,20 @@ class Pro extends Controller{
 
         $nweight = $data['weight']*1.5;
 
+        $arr = ['names'=>$user,'status'=>"答错喽"];
+
+        Db::table('history')->insert($arr);
+
         Db::table('user')->where('user',$user)->update(['weight'=>$nweight]);
 
         return json_encode(['status'=>'201','msg'=>'请求成功','data'=>"可惜了，回答错误"]);
+    }
+
+    public function his()
+    {
+        $data = Db::table('history')->order('id desc')->limit(10)->select();
+        
+        return view('his',['data'=>$data]);
     }
 
 

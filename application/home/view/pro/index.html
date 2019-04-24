@@ -17,7 +17,7 @@
 </tbody>
 </table>
       <center>
-       <button type="button" class="btn btn-danger">Start</button>
+       <button type="button" class="btn btn-danger">Start</button>      <button type="button" class="btn btn-success">查看历史纪录</button>
        </center>
 </body>
 </html>
@@ -27,7 +27,23 @@
 	$(document).ready(function(){
 
 
-            $(document).on('click',':button',function(){
+            $(document).on('click','.btn-success',function(){
+               
+                    layer.open({
+                      type: 2,
+                      title: '客观来呀',
+                      shadeClose: true,
+                      shade: false,
+                      maxmin: true, //开启最大化最小化按钮
+                      area: ['893px', '600px'],
+                      content: 'his.html'
+                    });
+                  });
+
+
+
+
+            $(document).on('click','.btn-danger',function(){
 
                $.ajax({
                     url : "{:url('Pro/once')}",
